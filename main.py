@@ -11,21 +11,23 @@ dp = Dispatcher(bot)
 logging.basicConfig(level=logging.INFO)
 
 task_cb = CallbackData('task', 'id', 'json')  # task:<id>:<json>
-
-
-@dp.message_handler(commands=['locate_me'])
-async def cmd_locate_me(message: types.Message):
-    reply = "Click on the the button below to share your location"
-    keyboard = types.ReplyKeyboardMarkup()
-    button = types.KeyboardButton("Share Position", request_location=True)
-    keyboard.add(button)
-    await message.answer(reply, reply_markup=keyboard)
     
-@dp.message_handler(commands=['show'])
-async def cmd_show(message: types.Message):
-    staticmap(message.get_args())
-    with open('temp.jp
-
+def get_task_keyboard(tasks):
+    task_json = json.dumps(tasks)
+    keyboard = types.InlineKeyboardMarkup()
+    for i, task in enumerate(tasks):
+        button = types.InlineKeyboardButton('❌✅'*task['done']+' %d. '%i+task['text'], callback_data=task_cb.new(id=i, json=task_json))
+        keyboard.add(button)
+    return keyboard
+                                            
+    
+@dp.callback_query_handler(task_cb.filter())
+async def task_modifier(query: types.CallbackQuery, callback_data: dict):
+    tasks = json.loads(callback_data['json'])
+    tasks[int(callback_data['id'])]['done'] = 1 - tasks[int(callback_data['id'])]['done']
+    await query.message.edit_reply_markup(get_task_keyboard(tasks))
+           
+    
 @dp.message_handler(filters.CommandStart())
 async def start(message: types.Message) -> None:
     message.answer('/start')
@@ -36,11 +38,7 @@ async def message_(message: types.Message):
     tasks = []
     for line in message.text.split('\n'):
          tasks.append({'done': 0, 'text': line})
-    for task in enumerate(tasks):
-        button = types.InlineKeyboardButton(, callback_data=task_cb.new(id=i, json=json(tasks))
-
-        keyboard.add(button)
-    await message.reply(text)
+    await message.reply('План:', reply_markup=get_task_keyboard(tasks))
 
 
 if __name__ == "__main__":
