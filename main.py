@@ -1,7 +1,7 @@
 import logging
 from aiogram import Bot, Dispatcher, executor, types, filters
 from aiogram.utils.callback_data import CallbackData
-import os, asyncio, traceback
+import os, asyncio, traceback, json
 import requests
 
 # Объект бота
@@ -31,7 +31,7 @@ async def task_modifier(query: types.CallbackQuery, callback_data: dict):
     
 @dp.message_handler(filters.CommandStart())
 async def start(message: types.Message) -> None:
-    message.answer('/start')
+    await message.answer('/start')
         
 @dp.message_handler(filters.ChatTypeFilter('private'), content_types=['text'])
 async def message_(message: types.Message):
