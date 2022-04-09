@@ -32,7 +32,7 @@ async def task_modifier(query: types.CallbackQuery, callback_data: dict):
 async def start(message: types.Message) -> None:
     message.answer('/start')
         
-@dp.message_handler(filters.ChatType('private'), content_types=['text']))
+@dp.message_handler(filters.ChatType('private'), content_types=['text'])
 async def message_(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup()
     tasks = []
