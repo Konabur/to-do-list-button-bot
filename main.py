@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 task_cb = CallbackData('task', 'id', 'json')  # task:<id>:<json>
     
 def get_task_keyboard(tasks):
-    task_json = json.dumps(tasks)
+    task_json = json.dumps(tasks).replace(':', ';')
     keyboard = types.InlineKeyboardMarkup()
     for i, task in enumerate(tasks):
         button = types.InlineKeyboardButton('❌✅'*task['done']+' %d. '%i+task['text'], callback_data=task_cb.new(id=i, json=task_json))
@@ -24,7 +24,7 @@ def get_task_keyboard(tasks):
     
 @dp.callback_query_handler(task_cb.filter())
 async def task_modifier(query: types.CallbackQuery, callback_data: dict):
-    tasks = json.loads(callback_data['json'])
+    tasks = json.loads(callback_data['json'].replace(';', ':'))
     tasks[int(callback_data['id'])]['done'] = 1 - tasks[int(callback_data['id'])]['done']
     await query.message.edit_reply_markup(get_task_keyboard(tasks))
            
