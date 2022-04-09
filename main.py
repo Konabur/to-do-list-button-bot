@@ -11,7 +11,7 @@ dp = Dispatcher(bot)
 # Включаем логирование, чтобы не пропустить важные сообщения
 logging.basicConfig(level=logging.INFO)
 
-task_cb = types.CallbackData('task', 'id', 'json')  # task:<id>:<json>
+task_cb = CallbackData('task', 'id', 'json')  # task:<id>:<json>
     
 def get_task_keyboard(tasks):
     task_json = json.dumps(tasks)
