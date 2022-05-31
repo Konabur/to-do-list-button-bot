@@ -45,7 +45,7 @@ class Database:
                           VALUES ({('?,'*len(data)).strip(',')})
                           ''',
                          tuple(data.values()))
-        self._conn.commit()
+        self._conn.commit() 
 
     def select(self, table: str, where='', columns=None, ):
         if not columns:
