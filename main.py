@@ -3,7 +3,10 @@ from aiogram import Bot, Dispatcher, executor, types, filters
 from aiogram.utils.callback_data import CallbackData
 import os, asyncio, traceback, json
 import requests
+from sql_db import Database
 
+# база данных
+db = Database('database.sqlite3')
 # Объект бота
 bot = Bot(token=os.getenv('TOKEN'))
 # Диспетчер для бота
